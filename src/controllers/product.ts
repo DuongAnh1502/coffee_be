@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { AddProductSchema, UpdateProductSchema } from "../schemas/products";
 import { prismaClient } from "..";
+import { NotFoundException } from "../exceptions/not-found";
+import { ErrorCodes } from "../exceptions/root";
 
 export const addProduct = async (req: Request, res: Response) => {
     const validatedData = AddProductSchema.parse(req.body);
@@ -37,4 +39,19 @@ export const listProducts = async (req: Request, res: Response) => {
     res.json(products);
 };
 
-export const getProductById = async (req: Request, res: Response) => {};
+export const getProductById = async (req: Request, res: Response) => {
+    try {
+        const product = await prismaClient.product.findFirstOrThrow({
+            where: {
+                id: req.params.id,
+            },
+        });
+        res.json(product);
+    } catch (err: any) {
+        throw new NotFoundException(
+            "Product not found!",
+            ErrorCodes.PRODUCT_NOT_FOUND,
+            err
+        );
+    }
+};

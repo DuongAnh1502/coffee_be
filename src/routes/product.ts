@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     addProduct,
+    getProductById,
     listProducts,
     updateProduct,
 } from "../controllers/product";
@@ -20,4 +21,9 @@ productRoutes.put(
     errorHandler(updateProduct)
 );
 productRoutes.get("/", errorHandler(listProducts));
+productRoutes.get(
+    "/:id",
+    [authMiddleware, adminMiddleware],
+    errorHandler(getProductById)
+);
 export default productRoutes;
