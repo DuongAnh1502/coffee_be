@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     addProduct,
+    deleteProduct,
     getProductById,
     listProducts,
     updateProduct,
@@ -25,5 +26,10 @@ productRoutes.get(
     "/:id",
     [authMiddleware, adminMiddleware],
     errorHandler(getProductById)
+);
+productRoutes.delete(
+    "/:id",
+    [authMiddleware, adminMiddleware],
+    errorHandler(deleteProduct)
 );
 export default productRoutes;

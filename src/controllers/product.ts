@@ -15,7 +15,22 @@ export const addProduct = async (req: Request, res: Response) => {
     res.json(product);
 };
 
-export const deleteProduct = async (req: Request, res: Response) => {};
+export const deleteProduct = async (req: Request, res: Response) => {
+    try {
+        await prismaClient.product.delete({
+            where: {
+                id: req.params.id,
+            },
+        });
+        res.json({ message: "Product deleted!" });
+    } catch (err: any) {
+        throw new NotFoundException(
+            "Product not found!",
+            ErrorCodes.PRODUCT_NOT_FOUND,
+            err
+        );
+    }
+};
 
 export const updateProduct = async (req: Request, res: Response) => {
     const validatedData = UpdateProductSchema.parse(req.body);
