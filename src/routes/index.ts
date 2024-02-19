@@ -9,6 +9,6 @@ const rootRouter: Router = Router();
 rootRouter.use("/v1/auth", authRoutes);
 rootRouter.use("/v1/products", productRoutes);
 rootRouter.use("/v1/addresses", addressRoutes);
-rootRouter.use("/v1/cart", cartRoutes);
+rootRouter.use("/v1/carts", cartRoutes);
 
 export default rootRouter;
