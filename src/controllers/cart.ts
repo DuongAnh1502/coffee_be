@@ -79,7 +79,7 @@ export const changeQuantity = async (req: Request, res: Response) => {
                 quantity: validatedData.quantity,
             },
         });
-        res.json(changeQuantity);
+        res.json(changedProduct);
     } catch (err: any) {
         throw new NotFoundException(
             "Product not found!",
