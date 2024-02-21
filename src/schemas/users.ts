@@ -11,6 +11,11 @@ export const LoginSchema = z.object({
     password: z.string().min(6),
 });
 
-export const addDefaultShippingSchema = z.object({
+export const AddDefaultShippingSchema = z.object({
     defaultShippingAddress: z.string(),
+});
+
+export const UpdateUserSchema = z.object({
+    name: z.string().optional(),
+    defaultShippingAddress: z.string().optional(),
 });

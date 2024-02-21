@@ -20,7 +20,7 @@ model User {
   email    String   @unique
   name     String
   password String
-  defaultShippingAddress Int?
+  defaultShippingAddress String?
   role Role @default(USER)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
