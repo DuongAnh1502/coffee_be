@@ -3,7 +3,6 @@ import { NotFoundException } from "../exceptions/not-found";
 import { ErrorCodes } from "../exceptions/root";
 import { prismaClient } from "..";
 import { UpdateUserSchema } from "../schemas/users";
-import { BadRequestException } from "../exceptions/bard-request";
 
 export const getUserById = async (req: Request, res: Response) => {
     try {
@@ -30,6 +29,21 @@ export const updateUser = async (req: Request, res: Response) => {
         },
     });
     if (user) {
+        if (validatedData.defaultShippingAddress) {
+            try {
+                const address = await prismaClient.address.findFirstOrThrow({
+                    where: {
+                        id: validatedData.defaultShippingAddress,
+                    },
+                });
+            } catch (err: any) {
+                throw new NotFoundException(
+                    "Address not found!",
+                    ErrorCodes.ADDRESS_NOT_FOUND,
+                    err
+                );
+            }
+        }
         const updatedUser = await prismaClient.user.update({
             where: {
                 id: user.id,
@@ -44,5 +58,3 @@ export const updateUser = async (req: Request, res: Response) => {
         );
     }
 };
-
-export const updateAddress = async (req: Request, res: Response) => {};
