@@ -17,6 +17,9 @@ export const getUserById = async (req: Request, res: Response) => {
             where: {
                 id: req.params.id,
             },
+            include: {
+                addresses: true,
+            },
         });
         res.json(user);
     } catch (err: any) {
