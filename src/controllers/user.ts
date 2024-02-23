@@ -4,6 +4,13 @@ import { ErrorCodes } from "../exceptions/root";
 import { prismaClient } from "..";
 import { UpdateUserSchema } from "../schemas/users";
 
+export const getListUser = async (req: Request, res: Response) => {
+    const users = await prismaClient.user.findMany({
+        skip: +req.query.skip! || 0,
+        take: 5,
+    });
+    res.json(users);
+};
 export const getUserById = async (req: Request, res: Response) => {
     try {
         const user = await prismaClient.user.findFirstOrThrow({
