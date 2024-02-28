@@ -11,6 +11,7 @@ export const getListUser = async (req: Request, res: Response) => {
     });
     res.json(users);
 };
+
 export const getUserById = async (req: Request, res: Response) => {
     try {
         const user = await prismaClient.user.findFirstOrThrow({
