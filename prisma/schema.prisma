@@ -14,7 +14,13 @@ enum Role {
   USER
   ADMIN
 }
-
+enum OrderEventStatus {
+  PENDING
+  ACCEPTED
+  OUT_FOR_DELIVERY
+  DELIVERED
+  CANCELLED
+}
 model User {
   id       String   @id @default(uuid())
   email    String   @unique
@@ -27,6 +33,7 @@ model User {
 
   cart Cart[]
   addresses Address[]
+  orders Order[]
 
   @@map("users")
 }
@@ -42,6 +49,7 @@ model Product {
   updatedAt   DateTime @updatedAt
 
   cart Cart[]
+  orderProducts OrderProduct[]
 
   @@map("products")
 }
@@ -70,4 +78,43 @@ model Cart {
   updatedAt   DateTime @updatedAt
 
   @@map("cart")
+}
+
+model Order {
+  id         String   @id @default(uuid())
+  user User @relation(fields: [userId], references: [id])
+  userId     String
+  totalPrice Float
+  address String
+  status OrderEventStatus @default(PENDING)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  products OrderProduct[]
+  events OrderEvent[]
+  @@map("orders")
+}
+
+model OrderProduct {
+  id Int @id @default(autoincrement())
+  order Order @relation(fields: [orderId], references: [id])
+  orderId String
+  product Product @relation(fields: [productId], references: [id])
+  productId String
+  quantity Decimal
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_product")
+}
+
+model OrderEvent {
+  id Int @id @default(autoincrement())
+  order Order @relation(fields: [orderId], references: [id])
+  orderId String
+  status OrderEventStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("order_events")
 }
