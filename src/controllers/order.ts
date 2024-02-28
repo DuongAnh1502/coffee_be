@@ -60,6 +60,30 @@ export const createOrder = async (req: Request, res: Response) => {
     });
 };
 
-export const getListOrder = async (req: Request, res: Response) => {};
+export const getListOrder = async (req: Request, res: Response) => {
+    let whereClause = {};
+    const status = req.query.status;
+    if (status) {
+        whereClause = {
+            status,
+        };
+    }
+    const orders = await prismaClient.order.findMany({
+        skip: +req.query.skip! || 0,
+        take: 5,
+        where: whereClause,
+    });
+    res.json(orders);
+};
+export const cancelOrder = async (req: Request, res: Response) => {};
 
-export const getOrderByUser = async (req: Request, res: Response) => {};
+export const getOrderByUser = async (req: Request, res: Response) => {
+    const orders = await prismaClient.order.findMany({
+        skip: +req.query.skip! || 0,
+        take: 5,
+        where: {
+            userId: req.user.id,
+        },
+    });
+    res.json(orders);
+};
