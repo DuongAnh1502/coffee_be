@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
 import { prismaClient } from "..";
+import { NotFoundException } from "../exceptions/not-found";
+import { ErrorCodes } from "../exceptions/root";
 // 1. to create a transaction
 // 2. to list all the cart items and proceed if cart is not empty
 // 3. calculate the total amount of the order
@@ -75,7 +77,33 @@ export const getListOrder = async (req: Request, res: Response) => {
     });
     res.json(orders);
 };
-export const cancelOrder = async (req: Request, res: Response) => {};
+export const cancelOrder = async (req: Request, res: Response) => {
+    return await prismaClient.$transaction(async (tx) => {
+        try {
+            const cancelOrder = await tx.order.update({
+                where: {
+                    id: req.params.id,
+                },
+                data: {
+                    status: "CANCELLED",
+                },
+            });
+            await tx.orderEvent.create({
+                data: {
+                    orderId: cancelOrder.id,
+                    status: "CANCELLED",
+                },
+            });
+            return res.json(cancelOrder);
+        } catch (err) {
+            throw new NotFoundException(
+                "Order is not found!",
+                ErrorCodes.ORDER_NOT_FOUND,
+                err
+            );
+        }
+    });
+};
 
 export const getOrderByUser = async (req: Request, res: Response) => {
     const orders = await prismaClient.order.findMany({
