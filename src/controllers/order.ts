@@ -115,3 +115,19 @@ export const getOrderByUser = async (req: Request, res: Response) => {
     });
     res.json(orders);
 };
+
+export const getOrders = async (req: Request, res: Response) => {
+    const listOrder = await prismaClient.order.findMany({
+        where: {
+            userId: req.user.id,
+        },
+        include: {
+            products: true,
+        },
+    });
+    if (listOrder) {
+        res.json(listOrder);
+    } else {
+        res.json({ message: "Your order is empty!" });
+    }
+};
