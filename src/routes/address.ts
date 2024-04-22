@@ -6,7 +6,7 @@ import {
     deleteAddress,
     updateAddress,
 } from "../controllers/address";
-const a = 2;
+const a = 3;
 const addressRoutes = Router();
 
 addressRoutes.post("/", [authMiddleware], errorHandler(addAddress));
