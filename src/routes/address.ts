@@ -9,6 +9,7 @@ import {
 const a = 3;
 const test = 10;
 const abcds = 12;
+const newRoutes = Router();
 const addressRoutes = Router();
 
 addressRoutes.post("/", [authMiddleware], errorHandler(addAddress));
