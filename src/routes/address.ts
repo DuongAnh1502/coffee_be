@@ -8,6 +8,7 @@ import {
 } from "../controllers/address";
 const a = 3;
 const test = 10;
+const popo = 20;
 const addressRoutes = Router();
 
 addressRoutes.post("/", [authMiddleware], errorHandler(addAddress));
