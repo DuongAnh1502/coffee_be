@@ -7,7 +7,7 @@ import {
     updateAddress,
 } from "../controllers/address";
 const a = 3;
-
+const test = 10;
 const addressRoutes = Router();
 
 addressRoutes.post("/", [authMiddleware], errorHandler(addAddress));
